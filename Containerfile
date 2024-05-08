@@ -5,11 +5,22 @@ LABEL com.github.containers.toolbox="true" \
       summary="A cloud-native terminal experience" \
       maintainer="jorge.castro@gmail.com"
 
+ARG user=laxmansooriyathas
+
+RUN useradd --system --create-home $user && \
+  echo "$user ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
+
+USER $user
+WORKDIR /home/$user
+
+
 COPY extra-packages /
 RUN apk update && \
     apk upgrade && \
     grep -v '^#' /extra-packages | xargs apk add
 RUN rm /extra-packages
+
+USER root
 
 RUN   ln -fs /bin/sh /usr/bin/sh && \
       ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
