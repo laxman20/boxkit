@@ -13,6 +13,7 @@ RUN useradd --system --create-home $user && \
 USER $user
 WORKDIR /home/$user
 
+USER root
 
 COPY extra-packages /
 RUN apk update && \
@@ -20,7 +21,6 @@ RUN apk update && \
     grep -v '^#' /extra-packages | xargs apk add
 RUN rm /extra-packages
 
-USER root
 
 RUN   ln -fs /bin/sh /usr/bin/sh && \
       ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
