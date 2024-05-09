@@ -13,7 +13,6 @@ eza
 ffmpeg
 fzf
 github-cli
-helix
 just
 make
 micro
@@ -29,6 +28,6 @@ speedtest-cli
 starship
 vimdiff
 wl-clipboard
-zellij
 zstd
 zsh
+zoxide
