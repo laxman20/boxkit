@@ -6,7 +6,6 @@ LABEL com.github.containers.toolbox="true" \
       maintainer="laxman"
 
 ARG user=laxmansooriyathas
-ARG atuin_ver=v18.2.0
 
 RUN useradd --system --create-home $user && \
   echo "$user ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
@@ -23,11 +22,17 @@ RUN rm /extra-packages
 
 RUN curl --create-dirs -o /usr/share/terminfo/x/xterm-kitty -fSL https://github.com/kovidgoyal/kitty/raw/master/terminfo/x/xterm-kitty
 
-RUN curl -LJ https://github.com/atuinsh/atuin/releases/download/$atuin_ver/atuin-$atuin_ver-aarch64-unknown-linux-gnu.tar.gz -o atuin.tar.gz && \
+WORKDIR /atuin
+
+RUN curl https://api.github.com/repos/atuinsh/atuin/releases/latest  \
+        | jq '.assets[] | select(.name | test("aarch64.*linux")).browser_download_url' \
+        | xargs curl -LJ -o atuin.tar.gz && \
     tar -xvf atuin.tar.gz && \
-    mv atuin-$atuin_ver-aarch64-unknown-linux-gnu/atuin /usr/bin && \
+    mv atuin-*/atuin /usr/bin && \
     rm -rf /artuin.tar.gz && \
-    rm -rf /atuin-$atuin_ver-aarch64-unknown-linux-gnu
+    rm -rf /atuin*
+
+WORKDIR /
 
 RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
 
