@@ -30,7 +30,7 @@ RUN curl https://api.github.com/repos/atuinsh/atuin/releases/latest  \
     tar -xvf atuin.tar.gz && \
     mv atuin-*/atuin /usr/bin && \
     rm -rf /artuin.tar.gz && \
-    rm -rf /atuin*
+    rm -rf /atuin
 
 WORKDIR /
 
